@@ -29,6 +29,7 @@ sudo systemctl restart vpsmarket
 
 vim /etc/nginx/conf.d/vps_market.conf
 
+```bash
 # =========================================================================
 # 🚀 工业级 VPS 交易中枢 - 高防护纯 HTTP Nginx 配置文件
 # =========================================================================
@@ -110,6 +111,6 @@ server {
     error_page 403 404 /static/404.html;
     error_page 500 502 503 504 /static/500.html;
 }
-
+```
 
 sudo systemctl restart nginx
