@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创建账户 - VPS 交易集市</title>
+    <style>
+        /* 延续全局极光暗黑底色 */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: radial-gradient(circle at 50% 0%, #17153b 0%, #0c1020 80%); min-height: 100vh; color: #f8fafc; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        
+        /* 极致磨砂毛玻璃卡片 */
+        .register-card { background: rgba(22, 30, 54, 0.45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); }
+        .title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 8px; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 30px; }
+        
+        /* 表单微光输入框 */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+        .form-input { width: 100%; background: rgba(12, 16, 32, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); padding: 12px 16px; border-radius: 12px; color: #fff; font-size: 14px; transition: all 0.3s; outline: none; }
+        .form-input:focus { border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.25); background: rgba(12, 16, 32, 0.7); }
+        
+        /* 🚀 新增：人机验证码一体化对齐组合舱 */
+        .captcha-flex { display: flex; gap: 12px; align-items: center; }
+        .captcha-img-box { background: rgba(12, 16, 32, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; height: 45px; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .captcha-img-box img { display: block; height: 100%; width: auto; object-fit: cover; }
+        
+        /* 绿色霓虹提交按钮 */
+        .btn-submit { width: 100%; background: linear-gradient(135deg, #10b981, #047857); border: none; padding: 14px; border-radius: 12px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.2s, opacity 0.2s; margin-top: 10px; }
+        .btn-submit:hover { opacity: 0.95; transform: translateY(-1px); }
+        .btn-submit:active { transform: translateY(1px); }
+        
+        /* 错误提示框 */
+        .alert-box { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 12px; border-radius: 12px; font-size: 13px; text-align: center; margin-bottom: 20px; }
+        .footer-link { text-align: center; margin-top: 25px; font-size: 13px; }
+        .footer-link a { color: #10b981; text-decoration: none; font-weight: 500; }
+        .footer-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="register-card">
+        <div class="title">创建新账户</div>
+        <div class="subtitle">成为服务商，开启您的 VPS 托管与流转业务</div>
+
+        <!-- 动态捕获后台验证码错误或用户名已存在的报错 -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert-box">⚠️ {{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label class="form-label">设置账户用户名</label>
+                <input type="text" name="username" class="form-input" placeholder="请设置您的唯一用户名" required autocomplete="off">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">设置安全密码</label>
+                <input type="password" name="password" class="form-input" placeholder="请设置高强度登录密码" required>
+            </div>
+            
+            <!-- 🚀 新增：人机验证交互舱 -->
+            <div class="form-group">
+                <label class="form-label">人机安全校验</label>
+                <div class="captcha-flex">
+                    <input type="text" name="captcha" class="form-input" style="flex: 1;" placeholder="输入右侧校验码" required autocomplete="off">
+                    <div class="captcha-img-box" title="看不清？点击图表即可刷新" onclick="refreshCaptcha()">
+                        <img id="captchaImg" src="/captcha" alt="验证码加载中">
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-submit">确认创建并入驻</button>
+        </form>
+
+        <div class="footer-link">
+            <span style="color: #64748b;">已经是数码极客？</span>
+            <a href="/login">直接安全登录</a>
+        </div>
+    </div>
+
+    <!-- 🚀 新增：带时间戳防御缓存的无感验证码就地刷新脚本 -->
+    <script>
+        function refreshCaptcha() {
+            // 通过给路径后缀追加一个时间戳参数，欺骗浏览器强制请求最新图片流，杜绝本地缓存导致的死图
+            document.getElementById('captchaImg').src = '/captcha?t=' + new Date().getTime();
+        }
+    </script>
+</body>
+</html>
