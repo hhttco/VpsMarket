@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球优质云资源流转中枢 - VPS MARKET</title>
+    <style>
+        /* 全局现代赛博极光背景与重置 */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: radial-gradient(circle at 50% 0%, #17153b 0%, #0c1020 80%); min-height: 100vh; color: #f1f5f9; padding-bottom: 80px; overflow-x: hidden; }
+        
+        /* 奢华毛玻璃顶部中枢导航 */
+        .navbar { background: rgba(12, 16, 32, 0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.06); position: sticky; top: 0; z-index: 100; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .logo-group { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 10px; height: 10px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 12px #3b82f6; }
+        .logo-text { font-size: 22px; font-weight: 900; letter-spacing: 1px; background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; align-items: center; gap: 24px; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: #f1f5f9; }
+        .btn-nav-publish { background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); color: #fff !important; padding: 8px 20px; border-radius: 20px; font-weight: 600; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: all 0.3s; }
+        .btn-nav-publish:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); }
+
+        /* 核心布局 */
+        .container { max-width: 1280px; margin: 40px auto 0; padding: 0 30px; }
+        .section-header { margin-bottom: 35px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .section-title { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* 极客微光搜索框 */
+        .search-wrapper { position: relative; width: 100%; max-width: 360px; }
+        .search-input { width: 100%; background: rgba(22, 30, 54, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); padding: 12px 18px; border-radius: 14px; color: #fff; font-size: 14px; outline: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); }
+        .search-input:focus { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); background: rgba(12, 16, 32, 0.8); }
+        .search-input::placeholder { color: #475569; }
+
+        /* 高阶数码格栅网格 */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
+        
+        /* 顶级极客微光卡片 */
+        .vps-card { background: rgba(22, 30, 54, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; }
+        .vps-card:hover { transform: translateY(-6px); border-color: rgba(59, 130, 246, 0.35); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
+        
+        /* 卡片头部与折扣气泡 */
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .provider-title { font-size: 19px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+        .badge-group { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+        .location-badge { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 600; text-transform: uppercase; }
+        
+        /* 🚀 新增：动态精算折扣率气泡标签 */
+        .analytics-badge { font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: 700; text-transform: uppercase; }
+        .badge-discount { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; }
+        .badge-premium { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; }
+        
+        /* 参数矩阵仪表盘 */
+        .spec-matrix { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; background: rgba(12, 16, 32, 0.3); padding: 16px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.02); }
+        .spec-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .spec-value { font-size: 14px; font-weight: 600; color: #cbd5e1; }
+        .spec-full { grid-column: span 2; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 4px; }
+        
+        /* 霓虹粉续费气泡舱 */
+        .renewal-capsule { text-align: right; background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.25); padding: 4px 10px; border-radius: 8px; min-width: 95px; }
+        .renewal-label { font-size: 11px; color: #f472b6; font-weight: 600; text-transform: uppercase; }
+        .renewal-value { color: #f472b6; font-size: 13px; font-weight: 700; margin-top: 2px; }
+
+        /* 双价格精密控制台 */
+        .price-console { display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 20px; margin-top: auto; }
+        .price-group { display: flex; flex-direction: column; }
+        .price-sale-label { font-size: 11px; color: #f59e0b; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
+        .price-sale { font-size: 26px; font-weight: 800; color: #f59e0b; line-height: 1; }
+        .residual-text { font-size: 11px; color: #475569; margin-top: 4px; font-weight: 500; }
+        .residual-text span { color: #64748b; font-weight: 600; }
+        
+        /* 高端交互动作按钮 */
+        .btn-action-buy { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; padding: 12px 24px; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-action-buy:hover { background: #fff; color: #0c1020; border-color: #fff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+
+        /* 顶级原生磨砂玻璃弹出视窗 (Modal) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8, 10, 20, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .glass-modal { background: rgba(22, 30, 54, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 35px; border-radius: 28px; width: 90%; max-width: 440px; text-align: center; transform: scale(0.92); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .modal-overlay.active .glass-modal { transform: scale(1); }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+        .modal-desc { font-size: 14px; color: #94a3b8; margin-bottom: 24px; line-height: 1.5; }
+        .contact-card { background: rgba(12, 16, 32, 0.6); border: 1px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 700; color: #10b981; letter-spacing: 0.5px; font-family: monospace; margin-bottom: 25px; word-break: break-all; }
+        .btn-modal-close { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #cbd5e1; width: 100%; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+        .btn-modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo-group">
+            <div class="logo-icon"></div>
+            <div class="logo-text">VPS MARKET</div>
+        </a>
+        <div class="nav-links">
+            {% if current_user.is_authenticated %}
+                <a href="/my-listings">💼 我的发布</a>
+                <a href="/publish" class="btn-nav-publish">上架机器</a>
+                <a href="/logout" style="color: #ef4444;">退出</a>
+            {% else %}
+                <a href="/login">安全登录</a>
+                <a href="/register" class="btn-nav-publish" style="background: rgba(255,255,255,0.08); box-shadow: none; border: 1px solid rgba(255,255,255,0.1);">加入入驻</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">🔥 正在全网流转的优质实例</h1>
+            
+            <!-- 全局实时搜索控制台 -->
+            <div class="search-wrapper">
+                <input type="text" id="vpsSearchInput" class="search-input" placeholder="输入商家/机房/配置/价格实时检索..." autocomplete="off">
+            </div>
+        </div>
+        
+        <div class="grid" id="vpsCardGrid">
+            {% for vps in vps_list %}
+            <div class="vps-card">
+                <div>
+                    <div class="card-header">
+                        <div class="provider-title">☁️ {{ vps.provider }}</div>
+                        <div class="badge-group">
+                            <div class="location-badge">📍 {{ vps.location }}</div>
+                            
+                            <!-- 🚀 新增：智能精算折扣/溢价自适应气泡 -->
+                            {% if vps.discount_rate > 0 %}
+                                <div class="analytics-badge badge-discount">📉 折价 {{ vps.discount_rate }}%</div>
+                            {% elif vps.discount_rate < 0 %}
+                                <div class="analytics-badge badge-premium">🔺 溢价 {{ vps.discount_rate | abs }}%</div>
+                            {% else %}
+                                <div class="analytics-badge badge-discount" style="color: #cbd5e1; border-color: rgba(255,255,255,0.1);">等价原值</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- 参数矩阵仪表盘 -->
+                    <div class="spec-matrix">
+                        <div>
+                            <div class="spec-label">核心算力</div>
+                            <div class="spec-value">{{ vps.cpu }}</div>
+                        </div>
+                        <div>
+                            <div class="spec-label">动态分配内存</div>
+                            <div class="spec-value">{{ vps.memory }}</div>
+                        </div>
+                        <div>
+                            <div class="spec-label">高速固态存储</div>
+                            <div class="spec-value">{{ vps.disk }}</div>
+                        </div>
+                        <div>
+                            <div class="spec-label">剩余到期合同</div>
+                            <div class="spec-value" style="color: #60a5fa;">⏳ {{ vps.remaining_days }} 天</div>
+                        </div>
+                        
+                        <!-- 流量与原厂续费组合控制区 -->
+                        <div class="spec-full" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div class="spec-label">每月配额流量</div>
+                                <div class="spec-value" style="color: #10b981;">📊 {{ vps.bandwidth }}</div>
+                            </div>
+                            <div class="renewal-capsule">
+                                <div class="renewal-label">🔄 原厂续费</div>
+                                <div class="renewal-value">￥{{ vps.renewal_price }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 精密一口价控制台 -->
+                <div class="price-console">
+                    <div class="price-group">
+                        <div class="price-sale-label">出让一口价</div>
+                        <div class="price-sale">￥{{ vps.sale_price }}</div>
+                        <div class="residual-text">合同当前剩余价值: <span>￥{{ vps.residual_value }}</span></div>
+                    </div>
+                    <button class="btn-action-buy" onclick="openBuyModal('{{ vps.provider }}', '{{ vps.contact }}')">立即购入</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- 半透明磨砂物理弹出视窗 -->
+    <div class="modal-overlay" id="buyModal">
+        <div class="glass-modal">
+            <div class="modal-title">🤝 意向确认</div>
+            <div class="modal-desc" id="modalDesc">请通过下方卖家留存的唯一凭证联系交易</div>
+            <div class="contact-card" id="modalContact"></div>
+            <button class="btn-modal-close" onclick="closeBuyModal()">关闭安全视窗</button>
+        </div>
+    </div>
+
+    <!-- 毫秒级前端搜索过滤与弹出脚本 -->
+    <script>
+        document.getElementById('vpsSearchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#vpsCardGrid .vps-card');
+            
+            cards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                if (cardText.includes(query)) {
+                    card.style.display = 'flex';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        function openBuyModal(provider, contact) {
+            document.getElementById('modalDesc').innerText = "您正在申请购入【" + provider + "】的机器实例，请通过卖家留存的唯一凭证取得联系：";
+            document.getElementById('modalContact').innerText = contact;
+            document.getElementById('buyModal').classList.add('active');
+        }
+        function closeBuyModal() {
+            document.getElementById('buyModal').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
